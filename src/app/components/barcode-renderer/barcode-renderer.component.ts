@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, AfterViewInit, Input } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, Input, SimpleChanges } from '@angular/core';
 import { EanWrapper } from 'src/app/class/ean-wrapper';
 
 @Component({
@@ -12,15 +12,34 @@ export class BarcodeRendererComponent implements AfterViewInit {
   barcodeCanvas!: ElementRef<HTMLCanvasElement>;
   context!: CanvasRenderingContext2D | null;
   @Input() possibleEan: string = "";
+  errorMsg ="";
 
   ngAfterViewInit(): void {
     this.context = this.barcodeCanvas.nativeElement.getContext('2d');
-    const myEan = new EanWrapper(this.possibleEan)
-    this.showBarcode(myEan)
+    try {
+      const myEan = new EanWrapper(this.possibleEan)
+      this.showBarcode(myEan)
+    } catch (error:any) {
+      this.errorMsg =error
+    }
+    
+  }
+  
+  ngOnChanges(changes:SimpleChanges) {
+    console.log(changes)
+    if(this.context && changes['possibleEan']  && changes['possibleEan'].currentValue != undefined) {
+      try {
+        this.showBarcode(new EanWrapper(changes['possibleEan'].currentValue))
+      } catch (error:any) {
+        this.errorMsg =error
+      }
+      
+    }
   }
 
   showBarcode(ean:EanWrapper) {
     if (this.context) {
+      this.context.clearRect(0, 0, 525, 400);
       const mask = ean.getMaskStyle()
       for (let index = 0; index < ean.barcodeValue.length; index++) {
         if (ean.barcodeValue[index] == "1" && mask[index] == "0") {

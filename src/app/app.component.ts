@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -8,8 +9,10 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title = 'barcodeViewerAngular';
   possibleEan = "";
+  @ViewChild('barcodeForm') barcodeForm!: NgForm;
 
-  showEan() {
-    this.possibleEan = "3666154117284"
+  onSubmit() {
+    console.log(this.barcodeForm.value)
+    this.possibleEan = this.barcodeForm.value.Ean
   }
 }

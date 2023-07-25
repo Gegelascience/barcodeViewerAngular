@@ -1,7 +1,8 @@
 
-<button (click)="showEan()">
-    Show Barcode
-</button>
+<form #barcodeForm="ngForm" (ngSubmit)="onSubmit()">
+    <input type="text" name="Ean" ngModel required>
+    <button type="submit" [disabled]="!barcodeForm.valid">Show Ean</button>
+  </form>
 
 <div *ngIf="possibleEan.length >0">
     <app-barcode-renderer [possibleEan]="possibleEan"></app-barcode-renderer>
