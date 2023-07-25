@@ -7,4 +7,9 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'barcodeViewerAngular';
+  possibleEan = "";
+
+  showEan() {
+    this.possibleEan = "3666154117284"
+  }
 }

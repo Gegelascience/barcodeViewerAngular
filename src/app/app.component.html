@@ -1,3 +1,10 @@
 
-<app-barcode-renderer></app-barcode-renderer>
+<button (click)="showEan()">
+    Show Barcode
+</button>
+
+<div *ngIf="possibleEan.length >0">
+    <app-barcode-renderer [possibleEan]="possibleEan"></app-barcode-renderer>
+</div>
+
 

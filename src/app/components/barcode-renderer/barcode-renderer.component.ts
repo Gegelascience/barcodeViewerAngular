@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, Input } from '@angular/core';
 import { EanWrapper } from 'src/app/class/ean-wrapper';
 
 @Component({
@@ -11,10 +11,11 @@ export class BarcodeRendererComponent implements AfterViewInit {
   @ViewChild('barcodeContainer', { static: true })
   barcodeCanvas!: ElementRef<HTMLCanvasElement>;
   context!: CanvasRenderingContext2D | null;
+  @Input() possibleEan: string = "";
 
   ngAfterViewInit(): void {
     this.context = this.barcodeCanvas.nativeElement.getContext('2d');
-    const myEan = new EanWrapper("3666154117284")
+    const myEan = new EanWrapper(this.possibleEan)
     this.showBarcode(myEan)
   }
 
