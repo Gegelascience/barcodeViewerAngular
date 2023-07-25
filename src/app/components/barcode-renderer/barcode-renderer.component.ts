@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, AfterViewInit, Input, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, ViewChild, OnInit, Input, SimpleChanges } from '@angular/core';
 import { EanWrapper } from 'src/app/class/ean-wrapper';
 
 @Component({
@@ -6,7 +6,7 @@ import { EanWrapper } from 'src/app/class/ean-wrapper';
   templateUrl: './barcode-renderer.component.html',
   styleUrls: ['./barcode-renderer.component.css']
 })
-export class BarcodeRendererComponent implements AfterViewInit {
+export class BarcodeRendererComponent implements OnInit {
 
   @ViewChild('barcodeContainer', { static: true })
   barcodeCanvas!: ElementRef<HTMLCanvasElement>;
@@ -14,19 +14,21 @@ export class BarcodeRendererComponent implements AfterViewInit {
   @Input() possibleEan: string = "";
   errorMsg ="";
 
-  ngAfterViewInit(): void {
-    this.context = this.barcodeCanvas.nativeElement.getContext('2d');
+  ngOnInit(): void {
     try {
       const myEan = new EanWrapper(this.possibleEan)
       this.showBarcode(myEan)
     } catch (error:any) {
       this.errorMsg =error
     }
-    
   }
   
   ngOnChanges(changes:SimpleChanges) {
     console.log(changes)
+    if (!this.context) {
+      this.context = this.barcodeCanvas.nativeElement.getContext('2d');
+    }
+
     if(this.context && changes['possibleEan']  && changes['possibleEan'].currentValue != undefined) {
       try {
         this.showBarcode(new EanWrapper(changes['possibleEan'].currentValue))
